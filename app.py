@@ -1,16 +1,17 @@
 """
 =========================================================
-Flask Chatbot using OpenAI GPT (v1.x Compatible)
+General Purpose Flask Chatbot Framework (OpenAI GPT)
 =========================================================
 
-This Flask app connects to OpenAI's GPT model (gpt-3.5-turbo)
-using the latest Python client (openai>=1.0.0).
+This app provides a reusable chatbot backend.
+Modify `chatbot_config.json` to customize chatbot behavior
+for different clients or use cases.
 
-Make sure you have:
-    pip install openai flask flask_cors python-dotenv
-
-Your .env file (in the project root) must contain:
-    OPENAI_API_KEY=sk-your_api_key_here
+Example use cases:
+- Customer Support
+- Travel Assistant
+- Restaurant Bot
+- Educational Tutor
 =========================================================
 """
 
@@ -22,13 +23,15 @@ import os
 import json
 
 # -------------------------------
-# Load environment variables
+# Load environment and config
 # -------------------------------
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
-
-# Initialize OpenAI client (new syntax)
 client = OpenAI(api_key=api_key)
+
+# Load chatbot configuration from file
+with open("chatbot_config.json", "r") as f:
+    config = json.load(f)
 
 # -------------------------------
 # Initialize Flask app
@@ -36,7 +39,6 @@ client = OpenAI(api_key=api_key)
 app = Flask(__name__)
 CORS(app)
 
-# Store chat history to maintain context
 conversation_history = []
 
 # -------------------------------
@@ -47,36 +49,38 @@ def home():
     return render_template("index.html")
 
 # -------------------------------
-# Route: Chatbot API
+# Route: Chatbot Interaction
 # -------------------------------
 @app.route("/chatbot", methods=["POST"])
 def chatbot():
     try:
-        # Parse the incoming JSON request
         data = json.loads(request.get_data(as_text=True))
         user_prompt = data.get("prompt", "")
 
         if not user_prompt:
             return "No prompt provided", 400
 
-        # Store the user's message
+        # Add user message to history
         conversation_history.append({"role": "user", "content": user_prompt})
 
-        # Generate a response using OpenAI
+        # Create chat completion request dynamically from config
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",  # or gpt-4 if you have access
+            model=config["model"],
             messages=[
-                {"role": "system", "content": "You are a friendly AI assistant."},
+                {
+                    "role": "system",
+                    "content": config["description"]
+                },
                 *conversation_history,
             ],
-            temperature=0.7,
-            max_tokens=50,
+            temperature=config["temperature"],
+            max_tokens=config["max_tokens"],
         )
 
-        # Extract the assistant's reply
+        # Extract assistant response
         reply = response.choices[0].message.content.strip()
 
-        # Add the reply to conversation history
+        # Store assistant reply in conversation history
         conversation_history.append({"role": "assistant", "content": reply})
 
         return reply
@@ -86,7 +90,7 @@ def chatbot():
         return str(e), 500
 
 # -------------------------------
-# Run Flask App
+# Run Flask app
 # -------------------------------
 if __name__ == "__main__":
     app.run(debug=True)
