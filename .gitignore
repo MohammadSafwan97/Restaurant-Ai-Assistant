@@ -1,5 +1,19 @@
-__*/
-DS*
-DS*/
-.DS_*
+# Environment variables
+.env
 
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+
+# macOS system files
+.DS_Store
+
+# IDE / Editor folders
+.vscode/
+.idea/
+
+# Logs
+*.log
