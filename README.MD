@@ -1,91 +1,86 @@
-# 🤖 OpenAI Chatbot using Flask
+🤖 Flask Chatbot using OpenAI GPT
 
-This is a simple web-based chatbot built with **Flask** (Python) and **OpenAI's GPT API**.  
-You can chat with the bot through a web interface similar to ChatGPT.
+A modular and configurable chatbot built with Flask and OpenAI GPT models.
+Easily adaptable for different domains (e.g., restaurant assistant, travel planner, customer support) by editing a configuration file.
 
----
+⚙️ Features
 
-## 🚀 Features
+Flask backend with OpenAI GPT integration
 
-- 💬 Conversational chatbot powered by OpenAI GPT (gpt-3.5-turbo or gpt-4)
-- 🌐 Flask backend + HTML/JS frontend
-- 🔒 API key secured via `.env` file
-- 🎨 Simple, responsive chat interface
+Configurable chatbot behavior via chatbot_config.json
 
----
+Conversation context memory
 
-## 🧱 Project Structure
+Domain-restricted responses
 
-chatbot_project/
-│
-├── app.py # Flask backend
-├── .env # OpenAI API key (not committed)
-├── .gitignore # Ignore sensitive files
-├── requirements.txt # Dependencies
-├── README.md # Documentation
-│
-├── templates/
-│ └── index.html # Webpage frontend
-│
-└── static/
-├── css/style.css # Styling
-├── script.js # Chat logic (fetches from Flask)
-└── images/ # User/Bot icons
+Frontend built with HTML, CSS, and JavaScript
 
-yaml
-Copy code
+🛠️ Setup
 
----
+1. Clone the Repository
+   git clone https://github.com/MohammadSafwan97/LLM_application_chatbot.git
+   cd LLM_application_chatbot
 
-## ⚙️ Setup Instructions
+2. Create and Activate Virtual Environment
+   python -m venv venv
+   venv\Scripts\activate # Windows
+   source venv/bin/activate # macOS/Linux
 
-### 1️⃣ Clone the repository
+3. Install Dependencies
+   pip install -r requirements.txt
 
-```bash
-git clone https://github.com/yourusername/chatbot_project.git
-cd chatbot_project
-2️⃣ Create a virtual environment
-bash
-Copy code
-python -m venv venv
-venv\Scripts\activate     # On Windows
-source venv/bin/activate  # On Mac/Linux
-3️⃣ Install dependencies
-bash
-Copy code
-pip install -r requirements.txt
-4️⃣ Create .env file
-In the project root, create a .env file and add:
+4. Configure Environment
 
-ini
-Copy code
-OPENAI_API_KEY=sk-your_openai_api_key_here
-5️⃣ Run the Flask app
-bash
-Copy code
+Create a .env file in the project root:
+
+OPENAI_API_KEY=sk-your_api_key_here
+
+🧩 Configuration
+
+Edit chatbot_config.json to define chatbot behavior:
+
+{
+"name": "Restaurant Assistant",
+"description": "You are a polite restaurant chatbot that only answers restaurant-related questions.",
+"model": "gpt-3.5-turbo",
+"temperature": 0.6,
+"max_tokens": 200,
+"off_topic_response": "I'm sorry, I can only answer questions related to our restaurant."
+}
+
+▶️ Run the Application
 python app.py
-By default, the server will run at:
-👉 http://127.0.0.1:5000/
 
-🧠 Usage
-Open the app in your browser at http://127.0.0.1:5000/
+Access the chatbot at http://127.0.0.1:5000
 
-Type a message and press Enter.
-
-The chatbot will respond using OpenAI's GPT model.
-
-🧩 Technologies Used
-Python
+🧠 Key Parameters
+Parameter Description
+description Defines chatbot’s tone and scope
+model OpenAI model (e.g., gpt-3.5-turbo, gpt-4)
+temperature Creativity control (0 = factual, 1 = creative)
+max_tokens Limits response length
+off_topic_response Default message for unrelated queries
+📦 Dependencies
 
 Flask
 
-OpenAI GPT API
+Flask-CORS
 
-HTML / CSS / JavaScript
+OpenAI (v1.0+)
 
+python-dotenv
 
-🧑‍💻 Author
-Created by Muhammad Safwan
-📧 Email: mohammadsafwan248@gmail.com
+🔒 Security
+
+.env file is excluded via .gitignore
+
+Never commit your API key to source control
+
+Regenerate keys if exposed
+
+👤 Author
+
+Muhammad Safwan
+📧 mohammadsafwan248@gmail.com
+
 🌐 GitHub: MohammadSafwan97
-```
