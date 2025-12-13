@@ -1,64 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!--general infomraion of the webpage-->
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chatbot</title>
-    <meta name="author" content="J.C. Chen" />
-    <!-- <link rel="stylesheet" href="css/style.css" /> -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
-    <!-- <link rel="shortcut icon" href='favicon.ico' type="image/x-icon">
-    <link rel="icon" href='favicon.ico' type="image/x-icon"> -->
-    <link
-      rel="shortcut icon"
-      href="{{ url_for('static', filename='favicon.ico') }}"
-      type="image/x-icon"
-    />
-    <link
-      rel="icon"
-      href="{{ url_for('static', filename='favicon.ico') }}"
-      type="image/x-icon"
-    />
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <!--end general information-->
-  <body>
-    <!-- <header>
-      <div class="color-block"></div>
-    </header> -->
 
-    <!--Chatbot container-->
-    <main>
-      <div class="chatbot">
-        <div class="chat-header">
-          <h1>My LLM</h1>
-        </div>
-        <div class="header-sub-text">
-          <p>
-            Copyright © JC 2023 - Created by JC with <a class="purple">❤</a>
-          </p>
-        </div>
+  <body
+    class="min-h-screen bg-slate-900 text-gray-100 flex items-center justify-center p-4"
+  >
+    <main class="w-full max-w-4xl">
+      <div class="bg-slate-800 rounded-3xl shadow-xl flex flex-col h-[88vh]">
+        <!-- Header -->
+        <header
+          class="px-6 py-4 border-b border-white/10 flex items-center gap-3"
+        >
+          <div
+            class="h-10 w-10 rounded-xl bg-purple-600 flex items-center justify-center"
+          >
+            <img  />
+          </div>
+          <div>
+            <h1 class="font-semibold">Restaurant Assistant</h1>
+            <p class="text-xs text-gray-400">Online</p>
+          </div>
+        </header>
 
-        <div class="spacer" id="messages-container"></div>
+        <!-- Messages -->
+        <section
+          id="messages-container"
+          class="flex-1 overflow-y-auto px-6 py-6 space-y-4"
+        ></section>
 
-        <form class="chat-form" id="message-form">
+        <!-- Input -->
+        <form id="message-form" class="p-4 border-t border-white/10 flex gap-3">
           <textarea
-            type="text"
             id="message-input"
-            placeholder="Send a message..."
+            rows="1"
+            placeholder="Ask anything..."
+            class="flex-1 resize-none rounded-xl bg-slate-700 px-4 py-3 focus:outline-none"
           ></textarea>
-          <button type="submit">➤</button>
+
+          <button
+            type="submit"
+            class="h-12 w-12 rounded-xl bg-purple-600 hover:bg-purple-700 transition"
+          >
+            ➤
+          </button>
         </form>
       </div>
     </main>
-    <!--end chatbot container-->
 
-    <!--Javascript to call the language model-->
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <!--end Javascript to call the language model-->
+    <!-- ================== TEMPLATES ================== -->
+
+    <!-- User Message -->
+    <template id="user-message-template">
+      <div class="flex items-start gap-3 ml-auto max-w-[85%] flex-row-reverse">
+        <img src="../static/user.png" class="h-9 w-9 rounded-xl" />
+        <p class="bg-purple-600 px-4 py-2 rounded-2xl text-sm"></p>
+      </div>
+    </template>
+
+    <!-- Bot Message -->
+    <template id="bot-message-template">
+      <div class="flex items-start gap-3 max-w-[85%]">
+        <img src="../static/Bot_logo.png" class="h-9 w-9 rounded-xl" />
+        <p class="bg-slate-700 px-4 py-2 rounded-2xl text-sm"></p>
+      </div>
+    </template>
+
+    <!-- Loading -->
+    <template id="loading-template">
+      <div id="loading" class="text-sm text-gray-400 italic">
+        Loading... please wait
+      </div>
+    </template>
+
+    <!-- ================== JS ================== -->
+
+    <script>
+      const form = document.getElementById("message-form");
+      const input = document.getElementById("message-input");
+      const container = document.getElementById("messages-container");
+
+      /* Append message using HTML templates */
+      function appendMessage(templateId, text = "") {
+        const template = document.getElementById(templateId);
+        const node = template.content.cloneNode(true);
+        const p = node.querySelector("p");
+        if (p) p.innerText = text;
+        container.appendChild(node);
+        container.scrollTop = container.scrollHeight;
+      }
+
+      /* Send message to Flask backend */
+      async function sendMessage(message) {
+        appendMessage("user-message-template", message);
+        appendMessage("loading-template");
+
+        try {
+          const response = await fetch("/chatbot", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: message }),
+          });
+
+          const data = await response.text();
+          document.getElementById("loading").remove();
+          appendMessage("bot-message-template", data);
+        } catch (err) {
+          document.getElementById("loading").remove();
+          appendMessage("bot-message-template", "Error contacting server.");
+          console.error(err);
+        }
+      }
+
+      /* Submit form */
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const message = input.value.trim();
+        if (!message) return;
+        input.value = "";
+        await sendMessage(message);
+      });
+
+      /* ENTER → send | SHIFT+ENTER → newline */
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          form.requestSubmit();
+        }
+      });
+    </script>
   </body>
 </html>
