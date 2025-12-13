@@ -1,0 +1,34 @@
+{
+  "restaurant_name": "Safwan Restaurant",
+  "location": "Karachi, Pakistan",
+
+  "hours": {
+    "breakfast": "7:00 AM – 11:30 AM",
+    "lunch": "12:00 PM – 4:00 PM",
+    "dinner": "7:00 PM – 11:30 PM"
+  },
+
+  "menu": {
+    "breakfast": {
+      "Halwa Puri": 250,
+      "Chana Masala": 220,
+      "Omelette": 180,
+      "Paratha": 80
+    },
+
+    "lunch": {
+      "Chicken Karahi": 950,
+      "Daal Chawal": 320,
+      "Chicken Biryani": 450
+    },
+
+    "dinner": {
+      "Chicken Karahi": 950,
+      "Chicken Biryani": 480,
+      "Haleem": 420,
+      "Chapli Kebab": 380
+    }
+  },
+
+  "currency": "PKR"
+}

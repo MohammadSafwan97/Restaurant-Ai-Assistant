@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Restaurant AI Assistant</title>
+    <title>Safwan Restaurant AI Assistant</title>
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -20,7 +20,6 @@
         <header
           class="px-6 py-4 border-b border-white/10 flex items-center gap-4"
         >
-          <!-- Logo -->
           <div
             class="h-12 w-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-xl shadow-lg"
           >
@@ -29,7 +28,7 @@
 
           <div>
             <h1 class="font-semibold text-lg tracking-wide">
-              Restaurant AI Assistant
+              Safwan Restaurant Assistant
             </h1>
             <p class="text-xs text-amber-400">
               Online • Smart Dining Support
@@ -51,7 +50,7 @@
           <textarea
             id="message-input"
             rows="1"
-            placeholder="Ask about menu, prices, or recommendations..."
+            placeholder="Ask about menu, hours, or recommendations..."
             class="flex-1 resize-none rounded-xl bg-[#2f2a28] border border-white/10 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
           ></textarea>
 
@@ -69,9 +68,7 @@
 
     <!-- User Message -->
     <template id="user-message-template">
-      <div
-        class="flex items-start gap-3 ml-auto max-w-[85%] flex-row-reverse"
-      >
+      <div class="flex items-start gap-3 ml-auto max-w-[85%] flex-row-reverse">
         <img
           src="../static/user.png"
           class="h-9 w-9 rounded-xl object-cover"
@@ -90,17 +87,14 @@
           class="h-9 w-9 rounded-xl object-cover"
         />
         <p
-          class="bg-[#2f2a28] border border-white/10 px-4 py-2 rounded-2xl text-sm shadow"
+          class="bg-[#2f2a28] border border-white/10 px-4 py-2 rounded-2xl text-sm shadow leading-relaxed"
         ></p>
       </div>
     </template>
 
     <!-- Loading -->
     <template id="loading-template">
-      <div
-        id="loading"
-        class="text-sm text-amber-400 italic pl-2"
-      >
+      <div id="loading" class="text-sm text-amber-400 italic pl-2">
         Preparing your order... 🍽️
       </div>
     </template>
@@ -112,15 +106,59 @@
       const input = document.getElementById("message-input");
       const container = document.getElementById("messages-container");
 
+      /* -------------------------------
+         Chatbot Initialization
+      --------------------------------*/
+      const WELCOME_MESSAGE = `👋 Welcome to **Safwan Restaurant**!
+
+We proudly serve authentic **Pakistani cuisine** in Karachi 🍽️
+
+You can ask me about:
+- Breakfast, lunch, or dinner menu
+- Opening hours
+- Location & reservations
+
+How may I assist you today?`;
+
+      document.addEventListener("DOMContentLoaded", () => {
+        appendMessage("bot-message-template", WELCOME_MESSAGE);
+      });
+
+      /* -------------------------------
+         Format bot messages
+      --------------------------------*/
+      function formatBotMessage(text) {
+        return text
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+          .replace(/^- (.*)$/gm, "• $1")
+          .replace(/\n/g, "<br>");
+      }
+
+      /* -------------------------------
+         Render message
+      --------------------------------*/
       function appendMessage(templateId, text = "") {
         const template = document.getElementById(templateId);
         const node = template.content.cloneNode(true);
         const p = node.querySelector("p");
-        if (p) p.innerText = text;
+
+        if (p) {
+          if (templateId === "bot-message-template") {
+            p.innerHTML = formatBotMessage(text);
+          } else {
+            p.innerText = text;
+          }
+        }
+
         container.appendChild(node);
         container.scrollTop = container.scrollHeight;
       }
 
+      /* -------------------------------
+         Send message
+      --------------------------------*/
       async function sendMessage(message) {
         appendMessage("user-message-template", message);
         appendMessage("loading-template");
@@ -145,6 +183,9 @@
         }
       }
 
+      /* -------------------------------
+         Form submit
+      --------------------------------*/
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const message = input.value.trim();
@@ -153,6 +194,7 @@
         await sendMessage(message);
       });
 
+      /* ENTER → send | SHIFT+ENTER → newline */
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
