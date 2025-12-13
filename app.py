@@ -1,36 +1,26 @@
 """
 =========================================================
-General Purpose Flask Chatbot Framework (OpenAI GPT)
-=========================================================
-
-This app provides a reusable chatbot backend.
-Modify `chatbot_config.json` to customize chatbot behavior
-for different clients or use cases.
-
-Example use cases:
-- Customer Support
-- Travel Assistant
-- Restaurant Bot
-- Educational Tutor
+General Purpose Flask Chatbot Framework (LangChain)
 =========================================================
 """
 
 from flask import Flask, request, render_template
 from flask_cors import CORS
-from openai import OpenAI
 from dotenv import load_dotenv
-import os
 import json
 
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+
 # -------------------------------
-# Load environment and config
+# Load environment
 # -------------------------------
 load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key=api_key)
 
-# Load chatbot configuration from file
-with open("chatbot_config.json", "r") as f:
+# -------------------------------
+# Load chatbot configuration (UTF-8 SAFE)
+# -------------------------------
+with open("chatbot_config.json", "r", encoding="utf-8") as f:
     config = json.load(f)
 
 # -------------------------------
@@ -39,6 +29,19 @@ with open("chatbot_config.json", "r") as f:
 app = Flask(__name__)
 CORS(app)
 
+# -------------------------------
+# LangChain LLM (OpenAI backend)
+# -------------------------------
+llm = ChatOpenAI(
+    model=config["model"],
+    temperature=config["temperature"],
+    max_tokens=config["max_tokens"],
+)
+
+# -------------------------------
+# Conversation history
+# (same behavior as your original version)
+# -------------------------------
 conversation_history = []
 
 # -------------------------------
@@ -54,40 +57,37 @@ def home():
 @app.route("/chatbot", methods=["POST"])
 def chatbot():
     try:
-        data = json.loads(request.get_data(as_text=True))
-        user_prompt = data.get("prompt", "")
+        data = request.get_json(force=True)
+        user_prompt = data.get("prompt", "").strip()
 
         if not user_prompt:
             return "No prompt provided", 400
 
-        # Add user message to history
-        conversation_history.append({"role": "user", "content": user_prompt})
-
-        # Create chat completion request dynamically from config
-        response = client.chat.completions.create(
-            model=config["model"],
-            messages=[
-                {
-                    "role": "system",
-                    "content": config["description"]
-                },
-                *conversation_history,
-            ],
-            temperature=config["temperature"],
-            max_tokens=config["max_tokens"],
+        # Add user message
+        conversation_history.append(
+            HumanMessage(content=user_prompt)
         )
 
-        # Extract assistant response
-        reply = response.choices[0].message.content.strip()
+        # Build message list
+        messages = [
+            SystemMessage(content=config["description"]),
+            *conversation_history,
+        ]
 
-        # Store assistant reply in conversation history
-        conversation_history.append({"role": "assistant", "content": reply})
+        # Call LLM
+        response = llm.invoke(messages)
+        reply = response.content.strip()
+
+        # Store assistant reply
+        conversation_history.append(
+            AIMessage(content=reply)
+        )
 
         return reply
 
     except Exception as e:
         print("Error:", e)
-        return str(e), 500
+        return "Internal server error", 500
 
 # -------------------------------
 # Run Flask app
