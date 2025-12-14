@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Safwan Restaurant • AI Concierge</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Elegant Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    >
+
+    <style>
+      body { font-family: "Inter", sans-serif; }
+      .heading { font-family: "Playfair Display", serif; }
+    </style>
+  </head>
+
+  <body class="min-h-screen bg-gradient-to-br from-[#0f0e0d] via-[#1a1816] to-black text-gray-100 flex items-center justify-center p-6">
+
+    <main class="w-full max-w-4xl relative">
+      <div class="bg-[#161412] rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.9)] flex flex-col h-[90vh] border border-white/10 overflow-hidden">
+
+        <!-- HEADER -->
+        <header class="px-8 py-6 border-b border-white/10 flex items-center justify-between bg-gradient-to-r from-[#1b1917] to-[#141210]">
+          <div class="flex items-center gap-4">
+            <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center shadow-lg">
+              🍽️
+            </div>
+            <div>
+              <h1 class="heading text-xl tracking-wide">Safwan Restaurant</h1>
+              <p class="text-xs text-amber-400">AI Dining Concierge • Karachi</p>
+            </div>
+          </div>
+          <div class="text-xs text-gray-400 hidden sm:block">
+            Premium Pakistani Cuisine
+          </div>
+        </header>
+
+        <!-- CHAT AREA -->
+        <section
+          id="messages-container"
+          class="flex-1 overflow-y-auto px-8 py-6 space-y-6 scrollbar-thin scrollbar-thumb-amber-600/30 scrollbar-track-transparent">
+
+          <!-- Initial welcome -->
+          <div class="flex items-start gap-3 max-w-[85%]">
+            <img src="../static/Bot_logo.png" class="h-9 w-9 rounded-xl object-cover" />
+            <div class="bg-[#22201e] border border-white/10 px-5 py-3 rounded-2xl text-sm shadow">
+              👋 Welcome to <span class="font-semibold text-amber-400">Safwan Restaurant</span>.<br />
+              How may I assist you today?
+            </div>
+          </div>
+
+        </section>
+
+        <!-- INPUT -->
+        <form id="message-form" class="px-6 py-5 border-t border-white/10 bg-[#141210]">
+          <div class="flex items-end gap-4">
+            <textarea
+              id="message-input"
+              rows="1"
+              placeholder="Ask about menu, prices, or recommendations…"
+              class="flex-1 resize-none rounded-2xl bg-[#1f1d1b] border border-white/10 px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 placeholder-gray-400"
+            ></textarea>
+
+            <button
+              type="submit"
+              class="h-12 w-12 rounded-2xl bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition-transform">
+              ➤
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <!-- ================= TEMPLATES ================= -->
+
+    <!-- USER MESSAGE -->
+    <template id="user-message-template">
+      <div class="flex items-start gap-3 ml-auto max-w-[85%] flex-row-reverse">
+        <img src="../static/user.png" class="h-9 w-9 rounded-xl object-cover" />
+        <p class="bg-gradient-to-br from-amber-600 to-yellow-600 text-black px-5 py-3 rounded-2xl text-sm shadow"></p>
+      </div>
+    </template>
+
+    <!-- BOT MESSAGE -->
+    <template id="bot-message-template">
+      <div class="flex items-start gap-3 max-w-[85%]">
+        <img src="../static/Bot_logo.png" class="h-9 w-9 rounded-xl object-cover" />
+        <p class="bg-[#22201e] border border-white/10 px-5 py-3 rounded-2xl text-sm shadow"></p>
+      </div>
+    </template>
+
+    <!-- LOADING -->
+    <template id="loading-template">
+      <div id="loading" class="text-sm text-amber-400 italic pl-2">
+        Preparing your experience…
+      </div>
+    </template>
+
+    <!-- ================= HELP SYSTEM ================= -->
+    {% include "help.html" %}
+
+    <!-- ================= CHAT JS ================= -->
+    <script>
+      const form = document.getElementById("message-form");
+      const input = document.getElementById("message-input");
+      const container = document.getElementById("messages-container");
+
+      function appendMessage(templateId, text = "") {
+        const template = document.getElementById(templateId);
+        const node = template.content.cloneNode(true);
+        const p = node.querySelector("p");
+        if (p) p.innerText = text;
+        container.appendChild(node);
+        container.scrollTop = container.scrollHeight;
+      }
+
+      async function sendMessage(message) {
+        appendMessage("user-message-template", message);
+        appendMessage("loading-template");
+
+        try {
+          const response = await fetch("/chatbot", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: message }),
+          });
+
+          const data = await response.text();
+          document.getElementById("loading").remove();
+          appendMessage("bot-message-template", data);
+        } catch (err) {
+          document.getElementById("loading").remove();
+          appendMessage("bot-message-template", "Please try again shortly.");
+          console.error(err);
+        }
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const message = input.value.trim();
+        if (!message) return;
+        input.value = "";
+        await sendMessage(message);
+      });
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          form.requestSubmit();
+        }
+      });
+    </script>
+
+    <!-- HELP JS -->
+    <script src="{{ url_for('static', filename='help.js') }}"></script>
+
+  </body>
+</html>

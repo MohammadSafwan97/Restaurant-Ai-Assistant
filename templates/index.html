@@ -104,7 +104,7 @@
         Preparing your experience…
       </div>
     </template>
-
+    {% include "help.html" %}
     <!-- ================= JS ================= -->
 
     <script>
@@ -157,5 +157,6 @@
         }
       });
     </script>
+     <script src="{{ url_for('static', filename='help.js') }}"></script>
   </body>
 </html>

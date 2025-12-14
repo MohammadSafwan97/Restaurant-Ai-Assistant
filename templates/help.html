@@ -1,0 +1,100 @@
+<!-- ================= HELP BUTTON ================= -->
+<button
+  id="help-btn"
+  class="fixed bottom-6 right-6 z-50 bg-amber-500 hover:bg-amber-600 text-black px-4 py-3 rounded-full shadow-xl text-sm font-medium">
+  ❓ Help
+</button>
+
+<!-- ================= HELP PANEL ================= -->
+<div
+  id="help-panel"
+  class="fixed bottom-24 right-6 z-50 w-80 bg-[#1f1d1b] border border-white/10 rounded-2xl shadow-2xl hidden">
+
+  <div class="px-4 py-3 border-b border-white/10 text-sm font-semibold text-amber-400">
+    How can I help you?
+  </div>
+
+  <div class="max-h-80 overflow-y-auto px-3 py-3 space-y-2 text-sm">
+
+    <button class="help-item" data-answer="🍽️ Here’s our menu:\n\n🍳 Breakfast: Halwa Puri, Chana Masala, Omelette, Paratha\n🍛 Lunch: Chicken Karahi, Daal Chawal, Chicken Biryani\n🍽️ Dinner: Chicken Karahi, Chicken Biryani, Haleem, Chapli Kebab">
+      📋 Can I see your full menu?
+    </button>
+
+    <button class="help-item" data-answer="💰 You can ask for prices by dish name.\nFor example: “How much is Chicken Biryani?”">
+      💰 What are the prices of your dishes?
+    </button>
+
+    <button class="help-item" data-answer="⏰ We are open daily:\nBreakfast: 7:00 AM – 11:30 AM\nLunch: 12:00 PM – 4:00 PM\nDinner: 7:00 PM – 11:30 PM">
+      ⏰ What are your opening and closing hours?
+    </button>
+
+    <button class="help-item" data-answer="📍 Safwan Restaurant is located in Karachi, Pakistan.">
+      📍 Where is Safwan Restaurant located?
+    </button>
+
+    <button class="help-item" data-answer="🚚 Currently, we offer takeaway only. Home delivery will be available soon.">
+      🚚 Do you offer home delivery?
+    </button>
+
+    <button class="help-item" data-answer="📞 You can place an order by telling me the dish name and quantity.\nExample: “Add Chicken Biryani to my order.”">
+      📞 How can I place an order?
+    </button>
+
+    <button class="help-item" data-answer="🌶️ Yes! You can request less or more spicy while placing your order.">
+      🌶️ Can I customize my order?
+    </button>
+
+    <button class="help-item" data-answer="🥡 Yes, takeaway and advance orders are available.">
+      🥡 Do you offer takeaway or advance orders?
+    </button>
+
+    <button class="help-item" data-answer="💳 We accept cash and bank transfer at the restaurant.">
+      💳 What payment methods do you accept?
+    </button>
+
+    <button class="help-item" data-answer="🥗 Yes! Vegetarian options include Chana Masala, Daal Chawal, and Paratha.">
+      🥗 Do you have vegetarian options?
+    </button>
+
+    <button class="help-item" data-answer="📅 Yes, you can book a table or place a bulk order by informing us in advance.">
+      📅 Can I book a table or place a bulk order?
+    </button>
+
+  </div>
+</div>
+
+<style>
+  .help-item {
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #2a2724;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.2s;
+  }
+  .help-item:hover {
+    background: #3a352f;
+  }
+</style>
+
+<script>
+  const helpBtn = document.getElementById("help-btn");
+  const helpPanel = document.getElementById("help-panel");
+
+  helpBtn.addEventListener("click", () => {
+    helpPanel.classList.toggle("hidden");
+  });
+
+  document.querySelectorAll(".help-item").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const question = btn.innerText;
+      const answer = btn.dataset.answer;
+
+      helpPanel.classList.add("hidden");
+
+      appendMessage("user-message-template", question);
+      appendMessage("bot-message-template", answer);
+    });
+  });
+</script>
