@@ -7,7 +7,7 @@
   "temperature": 0.7,
   "max_tokens": 300,
 
-  "welcome_message": "👋 Welcome to Safwan Restaurant! We serve delicious Pakistani breakfast, lunch, and dinner in Karachi 🍽️ What would you like to enjoy today?",
+  "welcome_message": " Welcome to Safwan Restaurant! We serve delicious Pakistani breakfast, lunch, and dinner in Karachi 🍽️ What would you like to enjoy today?",
 
   "off_topic_response": "I’m sorry 😊 — I can only help with Safwan Restaurant-related questions, such as our menu, timings, or reservations.",
 
