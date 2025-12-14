@@ -1,18 +1,17 @@
 <!-- ================= HELP BUTTON ================= -->
 <button
   id="help-btn"
-  class="fixed bottom-[5.5rem] sm:bottom-6
-         right-4 sm:right-6
+  class="absolute top-4 right-4 sm:top-6 sm:right-6
          z-50 bg-amber-500 hover:bg-amber-600
-         text-black px-4 py-3 rounded-full
+         text-black px-4 py-2 rounded-full
          shadow-xl text-sm font-medium">
-  ❓ Help
+  Help
 </button>
 
 <!-- ================= HELP PANEL ================= -->
 <div
   id="help-panel"
-  class="fixed bottom-[9.5rem] sm:bottom-24
+  class="absolute top-14 sm:top-16
          right-4 sm:right-6
          z-50 w-80 max-w-[90vw]
          bg-[#1f1d1b] border border-white/10
@@ -24,27 +23,59 @@
 
   <div class="max-h-80 overflow-y-auto px-3 py-3 space-y-2 text-sm">
 
-    <!-- BUTTONS UNCHANGED -->
-    <button class="help-item" data-answer="🍽️ Here’s our menu...">📋 Can I see your full menu?</button>
-    <button class="help-item" data-answer="💰 You can ask for prices...">💰 What are the prices?</button>
-    <button class="help-item" data-answer="⏰ We are open daily...">⏰ Opening hours</button>
-    <button class="help-item" data-answer="📍 Located in Karachi">📍 Location</button>
+    <button class="help-item"
+      data-answer="Certainly. Our menu includes a variety of traditional Pakistani dishes. Breakfast options include Halwa Puri, Chana Masala, Omelette, and Paratha. Lunch options include Chicken Karahi, Daal Chawal, and Chicken Biryani. Dinner selections include Chicken Karahi, Chicken Biryani, Haleem, and Chapli Kebab.">
+      Can I see your full menu?
+    </button>
+
+    <button class="help-item"
+      data-answer="You may inquire about pricing by mentioning the name of the dish. For example, you can ask how much Chicken Biryani costs.">
+      What are the prices of your dishes?
+    </button>
+
+    <button class="help-item"
+      data-answer="Safwan Restaurant is open daily. Breakfast is served from 7:00 AM to 11:30 AM. Lunch is served from 12:00 PM to 4:00 PM. Dinner is served from 7:00 PM to 11:30 PM.">
+      What are your opening and closing hours?
+    </button>
+
+    <button class="help-item"
+      data-answer="Safwan Restaurant is located in Karachi, Pakistan.">
+      Where is Safwan Restaurant located?
+    </button>
+
+    <button class="help-item"
+      data-answer="At present, we offer takeaway services only. Home delivery will be introduced in the near future.">
+      Do you offer home delivery?
+    </button>
+
+    <button class="help-item"
+      data-answer="You can place an order by informing us of the dish name along with the desired quantity. For example, please add one Chicken Biryani to my order.">
+      How can I place an order?
+    </button>
+
+    <button class="help-item"
+      data-answer="Yes, you may request adjustments such as spice level preferences while placing your order.">
+      Can I customize my order?
+    </button>
 
   </div>
 </div>
 
 <style>
-.help-item {
-  width: 100%;
-  text-align: left;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: #2a2724;
-  border: 1px solid rgba(255,255,255,0.05);
-  transition: background 0.2s;
-  word-break: break-word;
-}
-.help-item:hover { background: #3a352f; }
+  .help-item {
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #2a2724;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.2s;
+    word-break: break-word;
+  }
+
+  .help-item:hover {
+    background: #3a352f;
+  }
 </style>
 
 <script>

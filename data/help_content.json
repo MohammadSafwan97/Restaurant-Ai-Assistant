@@ -1,40 +1,40 @@
 {
   "help": [
     {
-      "question": "📋 Can I see your full menu?",
-      "answer": "🍽️ Here’s our menu:\n\n🍳 Breakfast: Halwa Puri, Chana Masala, Omelette, Paratha\n🍛 Lunch: Chicken Karahi, Daal Chawal, Chicken Biryani\n🍽️ Dinner: Chicken Karahi, Chicken Biryani, Haleem, Chapli Kebab"
+      "question": "Can I see your full menu?",
+      "answer": "Certainly. Our menu includes a variety of traditional Pakistani dishes. Breakfast options include Halwa Puri, Chana Masala, Omelette, and Paratha. For lunch, we offer Chicken Karahi, Daal Chawal, and Chicken Biryani. Dinner selections include Chicken Karahi, Chicken Biryani, Haleem, and Chapli Kebab."
     },
     {
-      "question": "💰 What are the prices of your dishes?",
-      "answer": "💰 You can ask for prices by dish name. For example:\n“How much is Chicken Biryani?”"
+      "question": "What are the prices of your dishes?",
+      "answer": "You may inquire about pricing by mentioning the name of the dish. For example, you can ask how much Chicken Biryani costs."
     },
     {
-      "question": "⏰ What are your opening and closing hours?",
-      "answer": "⏰ We are open daily:\nBreakfast: 7:00 AM – 11:30 AM\nLunch: 12:00 PM – 4:00 PM\nDinner: 7:00 PM – 11:30 PM"
+      "question": "What are your opening and closing hours?",
+      "answer": "Safwan Restaurant is open daily. Breakfast is served from 7:00 AM to 11:30 AM, lunch from 12:00 PM to 4:00 PM, and dinner from 7:00 PM to 11:30 PM."
     },
     {
-      "question": "📍 Where is Safwan Restaurant located?",
-      "answer": "📍 Safwan Restaurant is located in Karachi, Pakistan."
+      "question": "Where is Safwan Restaurant located?",
+      "answer": "Safwan Restaurant is located in Karachi, Pakistan."
     },
     {
-      "question": "📞 How can I place an order?",
-      "answer": "📞 You can place an order by telling me the dish name and quantity.\nExample: “Add Chicken Biryani to my order.”"
+      "question": "How can I place an order?",
+      "answer": "You can place an order by informing us of the dish name along with the desired quantity. For example, you may say please add one Chicken Biryani to my order."
     },
     {
-      "question": "🥗 Do you have vegetarian options?",
-      "answer": "🥗 Yes! We offer vegetarian dishes such as Chana Masala, Daal Chawal, and Paratha."
+      "question": "Do you have vegetarian options?",
+      "answer": "Yes, we offer a selection of vegetarian dishes, including Chana Masala, Daal Chawal, and Paratha."
     },
     {
-      "question": "🚚 Do you offer home delivery?",
-      "answer": "🚚 Currently, we offer takeaway only. Home delivery will be available soon."
+      "question": "Do you offer home delivery?",
+      "answer": "At present, we offer takeaway services only. Home delivery will be introduced in the near future."
     },
     {
-      "question": "💳 What payment methods do you accept?",
-      "answer": "💳 We accept cash and bank transfer at the restaurant."
+      "question": "What payment methods do you accept?",
+      "answer": "We accept cash payments as well as bank transfers at the restaurant."
     },
     {
-      "question": "📅 Can I book a table or place a bulk order?",
-      "answer": "📅 Yes, table bookings and bulk orders are available. Please inform us in advance."
+      "question": "Can I book a table or place a bulk order?",
+      "answer": "Yes, table reservations and bulk orders are available. We kindly request that you inform us in advance to ensure availability."
     }
   ]
 }
